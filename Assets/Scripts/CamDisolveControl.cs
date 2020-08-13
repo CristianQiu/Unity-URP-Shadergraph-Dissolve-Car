@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Cinemachine;
+using System.Collections;
 using UnityEngine;
-using Cinemachine;
 
-
-public class CamControl : MonoBehaviour
+public class CamDisolveControl : MonoBehaviour
 {
     public GameObject cam1;
     public GameObject cam2;
@@ -22,84 +20,62 @@ public class CamControl : MonoBehaviour
 
     public float speedDissolve = 5.0f;
 
-    private Coroutine currCo = null;
+    private Coroutine currDisolveCoroutine = null;
+    private WaitForSeconds wfs = new WaitForSeconds(5.0f);
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         cm1 = cam1.GetComponent<CinemachineVirtualCamera>();
         cm2 = cam2.GetComponent<CinemachineVirtualCamera>();
 
-        cm1.Priority= 10;
-        cm2.Priority = 9;
+        cm1.Priority = 9;
+        cm2.Priority = 10;
 
         paintCarMat = paintCarRenderer.sharedMaterial;
         paintCarMat.SetFloat(dissolveAmount, dissolveProgress);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-#if !UNITY_EDITOR
-        if (Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            if (cm1.Priority == 10)
-            {
-                cm2.Priority = 10;
-                cm1.Priority = 9;
-            }
-            else
-            {
-                cm1.Priority = 10;
-                cm2.Priority = 9;
-            }
-        }
-#else
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            //OnDissolveButtonPressed();
-            if (cm1.Priority == 10)
-            {
-                cm2.Priority = 10;
-                cm1.Priority = 9;
-            }
-            else
-            {
-                cm1.Priority = 10;
-                cm2.Priority = 9;
-            }
-        }
-#endif
+        StartCoroutine(PingPongCameras());
     }
 
     public void OnDissolveButtonPressed()
     {
-        if (currCo != null)
-        {
-            StopCoroutine(currCo);
-        }
-        currCo = StartCoroutine(DissolveCo());
+        if (currDisolveCoroutine != null)
+            StopCoroutine(currDisolveCoroutine);
+
+        currDisolveCoroutine = StartCoroutine(DissolveCoroutine());
     }
 
-    private IEnumerator DissolveCo()
+    private IEnumerator PingPongCameras()
+    {
+        while (true)
+        {
+            yield return wfs;
+
+            if (cm1.Priority == 10)
+            {
+                cm2.Priority = 10;
+                cm1.Priority = 9;
+            }
+            else
+            {
+                cm1.Priority = 10;
+                cm2.Priority = 9;
+            }
+        }
+    }
+
+    private IEnumerator DissolveCoroutine()
     {
         if (targetDissolve == 0.0f)
-        {
             targetDissolve = 1.0f;
-        }
         else
-        {
             targetDissolve = 0.0f;
-        }
 
         while (Mathf.Abs(targetDissolve - dissolveProgress) > 0.05f)
         {
-
             float offsetToTar = targetDissolve - dissolveProgress;
 
-            dissolveProgress =  dissolveProgress + (Mathf.Sign(offsetToTar) * speedDissolve * Time.deltaTime);
-
-
+            dissolveProgress = dissolveProgress + (Mathf.Sign(offsetToTar) * speedDissolve * Time.deltaTime);
 
             paintCarMat.SetFloat(dissolveAmount, dissolveProgress);
 
