@@ -1,2 +1,5 @@
-# URP-Shaders-playground
-Unity project to test URP shadergraph, VFX graph, and other shaders that might be supported by the RP.
+# About
+Unity project to test shadergraph in URP dissolving a car's body.
+
+# Preview
+![alt-text](./GithubImgs/TeaserGif.gif)
