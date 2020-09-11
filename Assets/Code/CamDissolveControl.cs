@@ -9,21 +9,21 @@ public class CamDissolveControl : MonoBehaviour
     [Header("Dissolve")]
     [SerializeField] private float dissolveSpeed = 0.75f;
 
-    [SerializeField] private MeshRenderer carBodyRenderer = null;
+    [SerializeField] private MeshRenderer carPaintRenderer = null;
 
     [Header("Cinemachine cameras")]
     [SerializeField] private CinemachineVirtualCamera cmCamFront = null;
 
     [SerializeField] private CinemachineVirtualCamera cmCamBack = null;
 
-    private Material carBodyMat;
-
-    private readonly int dissolveAmountId = Shader.PropertyToID("Dissolve_Progress");
+    private Material carPaintMat;
 
     private float dissolveProgress = 0.0f;
     private float targetDissolveValue = 0.0f;
 
-    private WaitForSeconds wfsAlternateCams = new WaitForSeconds(5.0f);
+    private readonly int dissolveAmountId = Shader.PropertyToID("Dissolve_Progress");
+
+    private WaitForSeconds wfsAlternateCams = new WaitForSeconds(6.0f);
     private Coroutine currDisolveCoroutine;
 
     #endregion
@@ -32,8 +32,8 @@ public class CamDissolveControl : MonoBehaviour
 
     private void Start()
     {
-        carBodyMat = carBodyRenderer.sharedMaterial;
-        carBodyMat.SetFloat(dissolveAmountId, dissolveProgress);
+        carPaintMat = carPaintRenderer.sharedMaterial;
+        carPaintMat.SetFloat(dissolveAmountId, dissolveProgress);
 
         StartCoroutine(AlternateCams());
     }
@@ -77,7 +77,7 @@ public class CamDissolveControl : MonoBehaviour
             dissolveProgress = dissolveProgress + (Mathf.Sign(offsetToTar) * dissolveSpeed * Time.deltaTime);
             dissolveProgress = Mathf.Clamp(dissolveProgress, 0.0f, 1.0f);
 
-            carBodyMat.SetFloat(dissolveAmountId, dissolveProgress);
+            carPaintMat.SetFloat(dissolveAmountId, dissolveProgress);
 
             yield return null;
         }
