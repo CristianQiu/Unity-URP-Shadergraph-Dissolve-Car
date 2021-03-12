@@ -8,12 +8,10 @@ public class CamDissolveControl : MonoBehaviour
 
     [Header("Dissolve")]
     [SerializeField] private float dissolveSpeed = 0.75f;
-
     [SerializeField] private MeshRenderer carPaintRenderer = null;
 
     [Header("Cinemachine cameras")]
     [SerializeField] private CinemachineVirtualCamera cmCamFront = null;
-
     [SerializeField] private CinemachineVirtualCamera cmCamBack = null;
 
     private Material carPaintMat;
