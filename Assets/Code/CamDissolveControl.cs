@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CamDissolveControl : MonoBehaviour
 {
-    #region Attributes
+    #region Private Attributes
 
     [Header("Dissolve")]
     [SerializeField] private float dissolveSpeed = 0.75f;
@@ -21,12 +21,12 @@ public class CamDissolveControl : MonoBehaviour
 
     private readonly int dissolveAmountId = Shader.PropertyToID("Dissolve_Progress");
 
-    private WaitForSeconds wfsAlternateCams = new WaitForSeconds(6.0f);
     private Coroutine currDisolveCoroutine;
+    private WaitForSeconds wfsAlternateCams = new WaitForSeconds(6.0f);
 
     #endregion
 
-    #region MonoBehaviour
+    #region MonoBehaviour Methods
 
     private void Start()
     {
@@ -43,7 +43,7 @@ public class CamDissolveControl : MonoBehaviour
 
     #endregion
 
-    #region Coroutines
+    #region Coroutine Methods
 
     private IEnumerator AlternateCams()
     {
@@ -85,7 +85,7 @@ public class CamDissolveControl : MonoBehaviour
 
     #endregion
 
-    #region UI
+    #region UI Methods
 
     public void OnDissolveButtonPressed()
     {
